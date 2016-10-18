@@ -1,5 +1,5 @@
 ---
-title: '6060 Practice: RMarkdown'
+title: 'quiz_mark'
 author: "Parco Sin"
 output:
   pdf_document:
@@ -14,10 +14,8 @@ output:
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 # load libraries
 library(tidyverse)
-library(psych)
 library(haven)
 library(apaTables)
-library(dplyr)
 
 #Load data 
 analytic_data <- read_csv("quiz2_analytic_data_female.csv")
