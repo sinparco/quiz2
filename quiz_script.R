@@ -8,17 +8,10 @@ library(apaTables)
 bfi_data <- psych::bfi
 
 #Labelling Data
-categorical_variables <- select(bfi_data, gender, education)
+categorical_variables <- select(bfi_data, gender, education, age)
 
 categorical_variables$gender <- as.factor(categorical_variables$gender)
 levels(categorical_variables$gender) <- list("Males"=1, "Females"=2)
-gender <- categorical_variables$gender
-
-#categorical_variables$education <- as.factor(categorical_variables$education)
-#levels(categorical_variables$education) <- list("HS"=1, "finished HS"=2, "some college"=3, "college graduate"=4, "graduate degree"=5)
-#education <- categorical_variables$education
-education <- bfi_data$education
-age <- bfi_data$age
 
 #Creating Item Scales
 agreeableness <- select (bfi_data, A1, A2, A3, A4, A5)
@@ -44,18 +37,18 @@ extraversion <- psych::alpha(as.data.frame(extraversion), check.keys=FALSE)$scor
 neuroticism <- psych::alpha(as.data.frame(neuroticism), check.keys=FALSE)$scores
 
 #Combine into analytic_data
-analytic_data <- as.data.frame(cbind(agreeableness, extraversion, neuroticism, gender, education, age))
+analytic_data <- cbind(agreeableness, extraversion, neuroticism, categorical_variables)
 save(analytic_data,file="analytic_data.csv")
 
 -----------------------------------------------------------------------
 #### PART 2: CONDUCT ANALYSES ####
 # 1 Correlation Tables
-analytic_data_nogender <- select(as.data.frame(analytic_data), -gender)
+analytic_data_nogender <- select(analytic_data, -gender)
 apa.cor.table(analytic_data_nogender, filename="Table1.doc", table.number=1)
 
 #2 Correlation table for Just Men Over 40
-analytic_data_men40 <- filter(as.data.frame(analytic_data), gender=="Male", age>40)
-analytic_data_men40 <- select(as.data.frame(analytic_data_men40), -gender)
+analytic_data_men40 <- select(analytic_data, gender=="Males") %>% filter(age>40)
+analytic_data_men40 <- select(analytic_data_men40, -gender)
 apa.cor.table(analytic_data_men40, filename="Table2.doc", table.number=2)
 
 # 4 Scatter Plot
