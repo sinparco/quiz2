@@ -1,0 +1,95 @@
+---
+title: '6060 Practice: RMarkdown'
+author: "Parco Sin"
+output:
+  pdf_document:
+    number_sections: yes
+    toc_depth: 3
+  html_document:
+    toc_depth: '3'
+  word_document:
+    toc_depth: '3'
+---
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+# load libraries
+library(tidyverse)
+library(psych)
+library(haven)
+library(apaTables)
+library(dplyr)
+
+#Load data 
+analytic_data <- read_csv("quiz2_analytic_data_female.csv")
+
+```
+
+# Relations among variables for women
+
+Below are the correlations among the variables for all participants (men and women).
+Note you will need to use just women in your rmarkdown document.
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+psych::pairs.panels(analytic_data)        
+```
+
+\pagebreak
+
+# Distributions
+## Distributions of negative affect scores
+
+Below we can see the distribution of negative affect scores is skewed.
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+my.hist2 <- ggplot(analytic_data,aes(neg_affect))
+my.hist2 <- my.hist2 + geom_histogram(aes(y= ..count..), binwidth=1, fill="black", color="black")
+my.hist2 <- my.hist2 + labs(title="Negative Affect Score",x="Negative Affect", y="Frequency")
+my.hist2 <- my.hist2 + theme_classic()
+my.hist2 <- my.hist2 + theme(axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
+my.hist2 <- my.hist2 + scale_x_continuous( breaks = seq(0, 3,by=0.5) )
+my.hist2 <- my.hist2 + scale_y_continuous( breaks = seq(0,1600,by=400), expand=c(0,0) )
+ggsave("Figure_5_NegativeAffect_Histogram_Female.tiff", plot=my.hist2, width=6,height=6)
+print(my.hist2)
+```
+
+\pagebreak
+
+## Neuroticism Distribution
+
+Below we can see the distribution of neuroticism scores is relatively normal.
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+my.hist <- ggplot(analytic_data,aes(Neuroticism))
+my.hist <- my.hist + geom_histogram(aes(y= ..count..), binwidth=1, fill="black", color="black")
+my.hist <- my.hist + labs(title="Neuroticism Score",x="Neuroticism", y="Frequency")
+my.hist <- my.hist + theme_classic()
+my.hist <- my.hist + theme(axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
+my.hist <- my.hist + scale_x_continuous( breaks = seq(0,25,by=5) )
+my.hist <- my.hist + scale_y_continuous( breaks = seq(0,150,by=10), expand=c(0,0) )
+ggsave("Figure_4_Neuroticism_Histogram_Female.tiff", plot=my.hist, width=6,height=6)
+print(my.hist)
+
+```
+
+\pagebreak
+
+#Relations among variables
+##Scatter plot for Negative Affect and Neuroticism
+
+Below you can see the correlation between negative affect and neuroticism with a regression line.
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+my.plot <- qplot(neg_affect, Neuroticism, data=analytic_data)
+my.plot <- my.plot + geom_smooth(method = "lm" , se = FALSE, color = "black")
+my.plot <- my.plot + theme_classic(14)
+my.plot <- my.plot + theme(axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                           axis.line.y = element_line(colour = 'black', size=0.5, linetype = 'solid'))
+my.plot <- my.plot + labs(title="", x="Negative Affect", y="Neuroticism")
+my.plot <- my.plot + coord_cartesian(xlim=c(0,3), ylim=c(0,25))
+
+print(my.plot)
+```
+
