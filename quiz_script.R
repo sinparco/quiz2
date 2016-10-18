@@ -9,7 +9,6 @@ bfi_data <- psych::bfi
 
 #Labelling Data
 categorical_variables <- select(bfi_data, gender, education, age)
-
 categorical_variables$gender <- as.factor(categorical_variables$gender)
 levels(categorical_variables$gender) <- list("Males"=1, "Females"=2)
 
@@ -40,7 +39,6 @@ neuroticism <- psych::alpha(as.data.frame(neuroticism), check.keys=FALSE)$scores
 analytic_data <- cbind(agreeableness, extraversion, neuroticism, categorical_variables)
 save(analytic_data,file="analytic_data.csv")
 
------------------------------------------------------------------------
 #### PART 2: CONDUCT ANALYSES ####
 # 1 Correlation Tables
 analytic_data_nogender <- select(analytic_data, -gender)
